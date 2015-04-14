@@ -1,5 +1,6 @@
 (ns com.softekinc.dynamic-reverse-proxy
   (:require [cljs.nodejs :as nodejs]
+            [goog.string :as gstring]
             [com.softekinc.proxy :refer [create-proxy]]
             [clojure.string :refer [blank?]]))
 
@@ -28,13 +29,12 @@
 
 (defn url-matches-route?
   "returns true when
-     (.-host route) is nil or is the same as (:host-name url))
-     AND (:path url) starts with (.-prefix route)
+     (:path url) starts with (.-prefix route)
 
    In both criteria, the string comparisons ignore case."
-  [{:keys [path host] :as url} route]
+  [{:keys [path] :as url} route]
   (let [pfx (aget route "prefix")]
-    (.startsWith path pfx)))
+    (gstring/startsWith path pfx)))
 
 (defn route-for-url
   "Gets the first route that matches the url map."
